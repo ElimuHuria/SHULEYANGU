@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Mfumo wa kuandaa matokeo na ripoti za shule ya msingi (Darasa I–VII).">
+<meta name="theme-color" content="#6d83f2">
+<title>Mfumo wa Matokeo ya Shule</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%93%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-sec="auth">
+
+<!-- ========== SKRINI YA KUINGIA ========== -->
+<div id="authView" class="auth hidden">
+ <div class="auth-box">
+  <div class="auth-logo">🎓</div>
+  <h1>Mfumo wa Matokeo ya Shule</h1>
+
+  <div id="au-setup" class="hidden">
+   <h2>Karibu! Sajili Msimamizi wa Kwanza</h2>
+   <p class="hint">Hii ni mara ya kwanza kutumia mfumo. Tengeneza akaunti ya Msimamizi; baadaye utasajili walimu wengine kupitia menyu ya <b>WATUMIAJI</b>.</p>
+   <form id="setupForm" onsubmit="doSetup(event)">
+    <label>Jina kamili<input id="sName" autocomplete="name" required></label>
+    <label>Email<input id="sEmail" type="email" autocomplete="email" required></label>
+    <label>Nenosiri<span class="pw"><input id="sPw" type="password" autocomplete="new-password" required><button type="button" onclick="togglePw('sPw',this)">👁</button></span></label>
+    <label>Rudia nenosiri<span class="pw"><input id="sPw2" type="password" autocomplete="new-password" required><button type="button" onclick="togglePw('sPw2',this)">👁</button></span></label>
+    <div id="setupMsg" class="msg"></div>
+    <button class="btn big" type="submit">Tengeneza Akaunti</button>
+   </form>
+  </div>
+
+  <div id="au-login" class="hidden">
+   <h2>Ingia</h2>
+   <form id="loginForm" onsubmit="doLogin(event)">
+    <label>Email<input id="lEmail" type="email" autocomplete="username" required></label>
+    <label>Nenosiri<span class="pw"><input id="lPw" type="password" autocomplete="current-password" required><button type="button" onclick="togglePw('lPw',this)">👁</button></span></label>
+    <label class="chk"><input type="checkbox" id="lRemember"> Nikumbuke kwenye kompyuta hii</label>
+    <div id="loginMsg" class="msg"></div>
+    <button class="btn big" type="submit">Ingia</button>
+   </form>
+   <p class="hint" style="margin-top:14px">Huna akaunti? Muombe Msimamizi wa shule akusajili.</p>
+  </div>
+ </div>
+</div>
+
+<!-- ========== MFUMO ========== -->
+<div id="appView" class="hidden">
+<header>
+ <div class="t"><img id="hLogo" class="hidden" alt="">
+  <div><h1 id="hTitle">Mfumo wa Matokeo ya Shule</h1><small id="hSub">Usajili • Mitihani • Ripoti</small></div></div>
+ <div class="hr">
+  <span class="me">👤 <b id="meName"></b> <em id="meRole"></em></span>
+  <button class="btn gray sm" onclick="changeMyPw()">🔑 Nenosiri</button>
+  <button class="btn gray adminOnly" onclick="openSet()">⚙ Mipangilio ya Shule</button>
+  <button class="btn red sm" onclick="logout()">⏻ Toka</button>
+ </div>
+</header>
+<nav>
+ <button id="nb-darasa" onclick="go('darasa')">🏫 DARASA</button>
+ <button id="nb-mitihani" onclick="go('mitihani')">📝 MITIHANI</button>
+ <button id="nb-ripoti" onclick="go('ripoti')">📄 RIPOTI</button>
+ <button id="nb-watumiaji" class="adminOnly hidden" onclick="go('watumiaji')">👥 WATUMIAJI</button>
+</nav>
+<main>
+
+<!-- DARASA -->
+<section id="sec-darasa" class="sec">
+ <div class="card">
+  <h2>Madarasa na Wanafunzi</h2>
+  <div class="tabs" id="clsTabs"></div>
+  <div class="row">
+   <label><b>Mwalimu wa Darasa:</b></label>
+   <input id="tName" placeholder="Jina la mwalimu wa darasa" style="min-width:240px" onchange="S.set.walimu[curCls]=this.value.trim();save()">
+  </div>
+  <div class="row">
+   <input id="stName" placeholder="Jina kamili la mwanafunzi" style="min-width:250px" onkeydown="if(event.key==='Enter')addStudent()">
+   <select id="stSex"><option value="ME">ME</option><option value="KE">KE</option></select>
+   <input id="stSimu" placeholder="Simu ya mzazi (si lazima)" style="width:190px" onkeydown="if(event.key==='Enter')addStudent()">
+   <button class="btn" onclick="addStudent()">+ Sajili Mwanafunzi</button>
+  </div>
+  <details class="row" style="display:block;margin-bottom:12px">
+   <summary style="cursor:pointer;color:#2563eb"><b>Sajili wanafunzi wengi kwa mara moja</b></summary>
+   <p class="hint">Bandika majina, jina moja kila mstari. Unaweza kuweka jinsia baada ya koma, mf. <i>Asha Juma, KE</i>. Unaweza kunakili moja kwa moja kutoka Excel.</p>
+   <textarea id="bulk" placeholder="Asha Juma, KE&#10;Baraka Mushi, ME&#10;..."></textarea>
+   <div class="row" style="margin-top:6px">
+    <label>Jinsia chaguo-msingi:</label>
+    <select id="bulkSex"><option>ME</option><option>KE</option></select>
+    <button class="btn" onclick="addBulk()">+ Sajili Wote</button>
+   </div>
+  </details>
+  <div class="row">
+   <input id="q" placeholder="🔍 Tafuta mwanafunzi..." oninput="renderList()" style="min-width:220px">
+   <span class="hint" id="cnt"></span>
+   <span style="flex:1"></span>
+   <button class="btn gray sm" onclick="promote()">⬆ Pandisha wote darasa linalofuata</button>
+  </div>
+  <div id="stList"></div>
+ </div>
+ <div class="card">
+  <h2>Hifadhi ya Data</h2>
+  <p class="hint">Data huhifadhiwa kwenye kivinjari hiki kiotomatiki. Pakua nakala mara kwa mara ili kuilinda au kuihamishia kompyuta nyingine.</p>
+  <button class="btn blue" onclick="exportData()">⬇ Pakua Nakala (Backup)</button>
+  <label class="btn gray" style="display:inline-block">⬆ Rudisha Nakala<input type="file" accept=".json" class="hidden" onchange="importData(event)"></label>
+ </div>
+</section>
+
+<!-- MITIHANI -->
+<section id="sec-mitihani" class="sec hidden">
+ <div class="card">
+  <h2>Mitihani</h2>
+  <div class="row">
+   <label>Darasa:</label><select id="exCls" onchange="renderExamPicker()"></select>
+   <label>Mtihani:</label><select id="exSel" onchange="lastEx[exCls.value]=this.value;renderMarks()"></select>
+   <button class="btn" onclick="newExam()">+ Mtihani Mpya</button>
+   <button class="btn red" onclick="delExam()">Futa</button>
+  </div>
+  <div class="row" style="background:#f1f5f9;padding:10px;border-radius:8px">
+   <label><b>Jina la Mtihani:</b></label>
+   <input id="exName" style="min-width:240px" placeholder="mf. Mtihani wa Kati ya Muhula" onchange="saveExMeta()">
+   <label><b>Muhula:</b></label>
+   <select id="exMuhula" onchange="saveExMeta()"><option value="">-- chagua --</option><option>Muhula wa I</option><option>Muhula wa II</option></select>
+   <label><b>Mwaka:</b></label>
+   <input id="exMwaka" style="width:85px" onchange="saveExMeta()">
+   <label><b>Tarehe:</b></label>
+   <input type="date" id="exTarehe" onchange="saveExMeta()">
+  </div>
+  <div class="row" style="border:2px dashed #2563eb;padding:10px;border-radius:8px;background:#f8fbff">
+   <b>📄 Template ya Alama:</b>
+   <button class="btn" onclick="exportCsv(false)">⬇ Pakua Template</button>
+   <label class="btn blue" style="display:inline-block;cursor:pointer">⬆ Pakia Template<input type="file" accept=".csv,.txt,.tsv" class="hidden" onchange="importMarks(event)"></label>
+   <button class="btn gray sm" onclick="exportCsv(true)">⬇ Pakua Matokeo ya Sasa</button>
+   <div class="hint" style="flex-basis:100%">Hatua: Pakua template (ina majina ya wanafunzi wa darasa hili) ➜ Fungua kwa Excel, jaza alama 0–100, kisha Hifadhi kama <b>CSV</b> ➜ Pakia hapa. Usibadilishe majina wala mpangilio wa safu. Masanduku tupu hayafuti alama zilizopo.</div>
+  </div>
+  <div class="row">
+   <label><input type="checkbox" id="sortPos" onchange="renderMarks()"> Panga kwa nafasi</label>
+   <span class="hint">Tumia <b>Enter</b> au <b>↓ ↑</b> kuhama kati ya wanafunzi. Alama 0–100.</span>
+  </div>
+  <details style="margin-bottom:12px">
+   <summary style="cursor:pointer;color:#2563eb"><b>Bandika matokeo kutoka Excel</b></summary>
+   <p class="hint">Nakili safu kutoka Excel zenye mpangilio: <b>Jina, Kiswahili, Hisabati, English, Sayansi, Jiografia na Mazingira, Historia ya Tanzania</b> kisha bandika hapa. Majina lazima yalingane na yaliyosajiliwa kwenye Darasa.</p>
+   <textarea id="pasteMarks"></textarea>
+   <button class="btn" style="margin-top:6px" onclick="importText(pasteMarks.value);pasteMarks.value=''">Pakia Matokeo</button>
+  </details>
+  <div id="exSummary"></div>
+  <div class="tw" id="marksBox"></div>
+  <p class="hint" id="gkey"></p>
+ </div>
+</section>
+
+<!-- RIPOTI -->
+<section id="sec-ripoti" class="sec hidden">
+ <div class="card noprint">
+  <h2>Ripoti</h2>
+  <div class="tabs" id="rTabs"></div>
+  <div class="row">
+   <label>Darasa:</label><select id="rpCls" onchange="renderRepPicker()"></select>
+   <label>Mtihani:</label><select id="rpEx" onchange="lastEx[rpCls.value]=this.value;renderReports()"></select>
+   <span id="stWrap"><label>Mwanafunzi:</label> <select id="rpSt" onchange="renderReports()"></select></span>
+   <button class="btn blue" onclick="doPrint()">🖨 Chapisha</button>
+  </div>
+  <p class="hint" id="rHint"></p>
+ </div>
+ <div id="repArea"></div>
+</section>
+
+<!-- WATUMIAJI -->
+<section id="sec-watumiaji" class="sec hidden">
+ <div class="card">
+  <h2>Sajili Mtumiaji Mpya</h2>
+  <p class="hint">Mtumiaji ataingia kwenye mfumo kwa email na nenosiri utakalomwekea hapa. <b>Msimamizi</b> anaweza kusimamia watumiaji na mipangilio; <b>Mwalimu</b> anaweza kutumia Darasa, Mitihani na Ripoti.</p>
+  <form id="userForm" onsubmit="addUser(event)" class="row" autocomplete="off">
+   <input id="uName" placeholder="Jina kamili" style="min-width:200px" required>
+   <input id="uEmail" type="email" placeholder="Email" style="min-width:230px" required>
+   <input id="uPw" type="text" placeholder="Nenosiri (angalau 6)" style="min-width:180px" required>
+   <select id="uRole"><option value="mwalimu">Mwalimu</option><option value="admin">Msimamizi</option></select>
+   <button class="btn" type="submit">+ Sajili Mtumiaji</button>
+  </form>
+  <div id="uMsg" class="msg"></div>
+ </div>
+ <div class="card">
+  <h2>Watumiaji wa Mfumo</h2>
+  <p class="hint" id="uCount"></p>
+  <div id="uList"></div>
+ </div>
+</section>
+</main>
+
+<dialog id="dlg">
+ <h2>Mipangilio ya Shule</h2>
+ <div class="fg"><label>Jina la shule</label><input id="sSchool"></div>
+ <div class="fg"><label>Anwani / S.L.P</label><input id="sAnwani" placeholder="mf. S.L.P 123, Dodoma"></div>
+ <div class="fg"><label>Mwaka</label><input id="sMwaka"></div>
+ <div class="fg"><label>Mkuu wa Shule</label><input id="sMkuu"></div>
+ <div class="fg"><label>Nembo ya shule</label><span><input type="file" accept="image/*" onchange="setLogo(event)"> <button class="btn red sm" onclick="S.set.logo='';save();applySet();openSet()">Ondoa</button></span></div>
+ <h3>Mipaka ya Madaraja (alama ya chini)</h3>
+ <div class="row">
+  <label>A ≥ <input id="bA" type="number" style="width:65px"></label>
+  <label>B ≥ <input id="bB" type="number" style="width:65px"></label>
+  <label>C ≥ <input id="bC" type="number" style="width:65px"></label>
+  <label>D ≥ <input id="bD" type="number" style="width:65px"></label>
+  <span class="hint">Chini ya D = E</span>
+ </div>
+ <div class="row" style="justify-content:flex-end"><button class="btn" onclick="saveSet()">Hifadhi</button> <button class="btn gray" onclick="document.getElementById('dlg').close()">Funga</button></div>
+</dialog>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
