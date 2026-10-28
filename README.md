@@ -8,7 +8,9 @@ Mfumo wa kusajili wanafunzi, kuingiza alama za mitihani na kuchapisha ripoti kwa
 - **MITIHANI** – alama kwa masomo 6, template ya CSV/Excel, jumla, wastani, daraja na nafasi papo hapo
 - **RIPOTI** – ripoti ya kila mwanafunzi, broadsheet ya darasa, uchambuzi wa masomo; kuchapisha A4
 - Nembo ya shule, mipaka ya madaraja inayobadilika, nakala ya data (backup/restore JSON)
-- Rangi hafifu kwa kila menyu, inafaa pia kwa simu
+- **Dark mode ya kitaalamu** (chaguo-msingi) na kitufe cha kubadili kuwa mandhari ya nuru; ripoti huchapishwa kwa karatasi nyeupe
+- **MUHTASARI** – dashboard ya wanafunzi, madarasa na mitihani ya hivi karibuni
+- Inafaa pia kwa simu
 
 ## 📁 Muundo
 ```

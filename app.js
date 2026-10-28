@@ -32,6 +32,7 @@ function applySet(){
  document.getElementById('hSub').textContent=(st.anwani?st.anwani+' • ':'')+'Mwaka '+st.mwaka;
  const l=document.getElementById('hLogo');
  if(st.logo){l.src=st.logo;l.classList.remove('hidden');}else l.classList.add('hidden');
+ document.getElementById('hMark').classList.toggle('hidden',!!st.logo);
 }
 function openSet(){
  const st=S.set;
@@ -58,19 +59,21 @@ function setLogo(ev){
 }
 
 function go(p){
- if(p==='watumiaji'&&!isAdmin())p='darasa';
- ['darasa','mitihani','ripoti','watumiaji'].forEach(x=>{
+ if(p==='watumiaji'&&!isAdmin())p='muhtasari';
+ ['muhtasari','darasa','mitihani','ripoti','watumiaji'].forEach(x=>{
   document.getElementById('sec-'+x).classList.toggle('hidden',x!==p);
   document.getElementById('nb-'+x).classList.toggle('active',x===p);
  });
  document.body.dataset.sec=p;
+ if(p==='muhtasari')renderOverview();
  if(p==='watumiaji')renderUsers();
  if(p==='darasa')renderClass();
  if(p==='mitihani'){fillClassSelect('exCls',curCls);renderExamPicker();}
  if(p==='ripoti'){fillClassSelect('rpCls',curCls);renderRepPicker();}
 }
 function refresh(){
- if(!document.getElementById('sec-darasa').classList.contains('hidden'))renderClass();
+ if(!document.getElementById('sec-muhtasari').classList.contains('hidden'))renderOverview();
+ else if(!document.getElementById('sec-darasa').classList.contains('hidden'))renderClass();
  else if(!document.getElementById('sec-mitihani').classList.contains('hidden'))renderMarks();
  else if(!document.getElementById('sec-ripoti').classList.contains('hidden'))renderReports();
 }
@@ -436,6 +439,40 @@ function importData(ev){
 
 /* Huitwa na auth.js baada ya mtumiaji kuingia */
 function startApp(){
- applySet();
- go('darasa');
+ applySet();syncThemeBtn();
+ go('muhtasari');
+}
+
+/* ---------- MUHTASARI (dashboard) ---------- */
+function renderOverview(){
+ const tot=S.students.length,me=S.students.filter(s=>s.sex==='ME').length;
+ const withMarks=S.exams.filter(e=>Object.keys(e.marks).some(id=>Object.keys(e.marks[id]||{}).length));
+ ovStats.innerHTML=[
+  [tot,'Wanafunzi wote'],[me+' / '+(tot-me),'ME / KE'],
+  [CLASSES.filter(c=>studentsOf(c).length).length+'/'+CLASSES.length,'Madarasa yenye wanafunzi'],
+  [S.exams.length,'Mitihani'],[withMarks.length,'Mitihani yenye alama']
+ ].map(x=>`<div class="stat"><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');
+ const max=Math.max(1,...CLASSES.map(c=>studentsOf(c).length));
+ ovClasses.innerHTML=tot?CLASSES.map(c=>{const n=studentsOf(c).length;
+  return `<div class="hbar"><span class="lb" style="width:110px">Darasa la ${c}</span><div class="tr"><i style="width:${n/max*100}%"></i></div><b>${n}</b></div>`;}).join('')
+  :'<p class="hint">Bado hakuna wanafunzi. Anza kwa kusajili kwenye menyu ya DARASA.</p>';
+ const rows=withMarks.slice().reverse().slice(0,6).map(e=>{
+  const st=stats(e,studentsOf(e.cls));
+  return `<tr><td class="l">${esc(e.name)}</td><td>${e.cls}</td><td>${f1(st.cavg)||'-'}</td><td>${st.pass==null?'-':st.pass.toFixed(0)+'%'}</td></tr>`;}).join('');
+ ovExams.innerHTML=rows?`<table><tr><th>Mtihani</th><th>Darasa</th><th>Wastani</th><th>Ufaulu</th></tr>${rows}</table>`
+  :'<p class="hint">Bado hakuna mtihani wenye alama.</p>';
+}
+
+/* ---------- MANDHARI (dark / light) ---------- */
+function syncThemeBtn(){
+ const b=document.getElementById('themeBtn');if(!b)return;
+ const dark=document.documentElement.dataset.theme!=='light';
+ b.textContent=dark?'🌙':'☀️';
+ const m=document.querySelector('meta[name=theme-color]');if(m)m.content=dark?'#0b1120':'#eef2fa';
+}
+function toggleTheme(){
+ const n=document.documentElement.dataset.theme==='light'?'dark':'light';
+ document.documentElement.dataset.theme=n;
+ try{localStorage.setItem('mfumo_theme',n);}catch(e){}
+ syncThemeBtn();
 }

@@ -1,160 +1,215 @@
 /* =========================================================
-   Mfumo wa Matokeo ya Shule — Mtindo (rangi hafifu)
+   Mfumo wa Matokeo ya Shule — Dark Mode (Professional)
+   Mandhari: giza (chaguo-msingi) na nuru. Ripoti huonekana
+   kama karatasi nyeupe na huchapishwa kwa rangi nyepesi.
    ========================================================= */
 :root{
-  --bl:#3b4fa8;          /* rangi kuu ya maandishi/vichwa */
-  --bl2:#5b6ee1;         /* bluu ya vitufe */
-  --bd:#d6deec;          /* mipaka */
-  --bg:#eef4ff;          /* mandharinyuma ya ukurasa (hubadilika kwa menyu) */
-  --card:#ffffff;
-  --tint:#f4f7ff;
-  --ink:#1e293b;
-  --muted:#64748b;
+  color-scheme:dark;
+  --bg:#0b1120;          /* mandharinyuma ya ukurasa */
+  --surface:#111a2e;     /* kadi */
+  --raised:#172238;      /* vitu vilivyoinuka: input, safu za jedwali */
+  --raised2:#1d2b46;
+  --bd:#26344f;          /* mipaka */
+  --ink:#e6edf7;         /* maandishi */
+  --muted:#93a4c0;
+  --th:#1a2742;          /* kichwa cha jedwali */
+  --acc:#6c8cff;         /* rangi ya msisitizo (hubadilika kwa menyu) */
+  --acc-ink:#0b1120;
+  --ok:#34d399;--bad:#f87171;--warn:#fbbf24;
+  --gA:rgba(52,211,153,.20);--gB:rgba(96,165,250,.20);--gC:rgba(250,204,21,.18);--gD:rgba(251,146,60,.20);--gE:rgba(248,113,113,.22);
+  --shadow:0 6px 24px rgba(0,0,0,.35);
+  --glow:rgba(108,140,255,.18);
+  --radius:14px;
 }
-/* Kila menyu ina rangi yake hafifu */
-body[data-sec="darasa"]{--bg:#eaf3ff;--tint:#f2f8ff}      /* bluu hafifu */
-body[data-sec="mitihani"]{--bg:#e9f8ef;--tint:#f1fbf5}    /* kijani hafifu */
-body[data-sec="ripoti"]{--bg:#f2edff;--tint:#f8f5ff}      /* zambarau hafifu */
-body[data-sec="watumiaji"]{--bg:#fff3e6;--tint:#fffaf3}   /* chungwa hafifu */
-body[data-sec="auth"]{--bg:#e6f0ff}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg:#eef2fa;--surface:#ffffff;--raised:#f3f6fc;--raised2:#e8eefb;--bd:#d5dded;
+  --ink:#1b2438;--muted:#5d6b86;--th:#e6ecfb;--acc:#4a63d8;--acc-ink:#fff;
+  --ok:#15935f;--bad:#d03a3a;--warn:#b77a06;
+  --gA:#d6f4e3;--gB:#d9e8fd;--gC:#fbf1c4;--gD:#fde4cd;--gE:#fbd9d9;
+  --shadow:0 4px 18px rgba(40,60,120,.10);--glow:rgba(74,99,216,.12);
+}
+/* Kila menyu ina rangi yake ya msisitizo */
+body[data-sec="muhtasari"]{--acc:#6c8cff}
+body[data-sec="darasa"]{--acc:#4fb3ff}
+body[data-sec="mitihani"]{--acc:#34d3a0}
+body[data-sec="ripoti"]{--acc:#a78bfa}
+body[data-sec="watumiaji"]{--acc:#fbab4c}
+:root[data-theme="light"] body[data-sec="darasa"]{--acc:#1f7fd1}
+:root[data-theme="light"] body[data-sec="mitihani"]{--acc:#12935f}
+:root[data-theme="light"] body[data-sec="ripoti"]{--acc:#7a56d8}
+:root[data-theme="light"] body[data-sec="watumiaji"]{--acc:#cf7410}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:"Segoe UI",system-ui,Arial,Helvetica,sans-serif;color:var(--ink);
-  background:linear-gradient(160deg,var(--bg) 0%,#fbfcff 100%) fixed;min-height:100vh;
-  transition:background .4s;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;font-family:"Inter","Segoe UI",system-ui,-apple-system,Arial,sans-serif;color:var(--ink);min-height:100vh;
+  background:radial-gradient(900px 500px at 10% -10%,var(--glow),transparent 60%),radial-gradient(800px 500px at 100% 0%,rgba(34,211,182,.07),transparent 60%),var(--bg);
+  background-attachment:fixed;transition:background-color .3s,color .3s;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+::selection{background:var(--acc);color:var(--acc-ink)}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--raised2);border-radius:8px;border:2px solid var(--surface)}
+::-webkit-scrollbar-track{background:transparent}
+.hidden{display:none!important}
 
-/* ---------- Kichwa & menyu ---------- */
-header{background:linear-gradient(90deg,#dfe6ff,#d9ecff 55%,#d4f3f6);color:var(--bl);padding:10px 20px;
-  display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;
-  border-bottom:1px solid #c7d4f3}
-header .t{display:flex;align-items:center;gap:10px}
-header img{height:42px;width:42px;object-fit:contain;background:#fff;border-radius:8px;padding:2px;box-shadow:0 1px 4px rgba(0,0,0,.12)}
-header h1{margin:0;font-size:19px}
-header small{opacity:.8}
+/* ---------- Kichwa ---------- */
+header{background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(10px);color:var(--ink);padding:12px 22px;
+  display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;border-bottom:1px solid var(--bd)}
+header .t{display:flex;align-items:center;gap:12px}
+header img{height:44px;width:44px;object-fit:contain;background:#fff;border-radius:10px;padding:3px}
+.mark{height:44px;width:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;
+  background:linear-gradient(135deg,var(--acc),#22d3b6);box-shadow:0 4px 14px var(--glow)}
+header h1{margin:0;font-size:18px;letter-spacing:.2px}
+header small{color:var(--muted)}
 header .hr{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-header .me{font-size:13px;background:rgba(255,255,255,.7);padding:5px 10px;border-radius:20px}
-header .me em{font-style:normal;color:var(--muted);font-size:12px}
-nav{background:rgba(255,255,255,.75);backdrop-filter:blur(4px);display:flex;gap:8px;padding:10px 20px;
-  border-bottom:1px solid var(--bd);flex-wrap:wrap;position:sticky;top:0;z-index:20}
-nav button{padding:10px 22px;border:none;background:#e8edf8;border-radius:10px;font-size:15px;font-weight:700;
-  cursor:pointer;color:#475569;transition:.15s}
-nav button:hover{background:#dbe4f7;transform:translateY(-1px)}
-nav button.active{background:var(--bl2);color:#fff;box-shadow:0 3px 8px rgba(91,110,225,.35)}
-main{padding:18px;max-width:1200px;margin:auto}
+header .me{font-size:13px;background:var(--raised);border:1px solid var(--bd);padding:6px 12px;border-radius:999px}
+header .me em{font-style:normal;color:var(--muted);font-size:12px;margin-left:4px}
 
-/* ---------- Kadi na vichwa ---------- */
-.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;
-  box-shadow:0 2px 10px rgba(60,80,140,.07);margin-bottom:16px;animation:fade .3s}
-@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-h2{margin:0 0 12px;color:var(--bl)}
-h3{margin:14px 0 8px;color:var(--bl)}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.tabs button{padding:8px 14px;border:1px solid var(--bl2);background:#fff;color:var(--bl);border-radius:20px;cursor:pointer;font-weight:700;transition:.15s}
-.tabs button:hover{background:var(--tint)}
-.tabs button.active{background:var(--bl2);color:#fff}
+/* ---------- Menyu ---------- */
+nav{display:flex;gap:6px;padding:10px 22px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--bd);flex-wrap:wrap;position:sticky;top:0;z-index:20}
+nav button{padding:9px 18px;border:1px solid transparent;background:transparent;border-radius:10px;font-size:14px;font-weight:600;
+  cursor:pointer;color:var(--muted);transition:.15s;font-family:inherit}
+nav button:hover{color:var(--ink);background:var(--raised)}
+nav button.active{color:var(--ink);background:var(--raised);border-color:var(--bd);box-shadow:inset 0 -2px 0 var(--acc)}
+main{padding:20px;max-width:1240px;margin:auto}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:18px 10px 28px}
+
+/* ---------- Kadi ---------- */
+.card{background:var(--surface);border:1px solid var(--bd);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);
+  margin-bottom:18px;animation:fade .3s both;position:relative}
+.card::before{content:"";position:absolute;left:20px;right:20px;top:-1px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--acc),transparent)}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h2{margin:0 0 14px;font-size:19px;color:var(--ink)}
+h3{margin:16px 0 8px;font-size:15px;color:var(--acc)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{padding:7px 14px;border:1px solid var(--bd);background:var(--raised);color:var(--muted);border-radius:999px;cursor:pointer;font-weight:600;font-size:13px;transition:.15s;font-family:inherit}
+.tabs button:hover{color:var(--ink);border-color:var(--acc)}
+.tabs button.active{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
 
 /* ---------- Fomu & vitufe ---------- */
-input,select,textarea{padding:8px 10px;border:1px solid #b6c2d9;border-radius:8px;font-size:14px;font-family:inherit;background:#fff}
-input:focus,select:focus,textarea:focus{outline:2px solid #a9b6f5;border-color:var(--bl2)}
+input,select,textarea{padding:9px 11px;border:1px solid var(--bd);border-radius:9px;font-size:14px;font-family:inherit;background:var(--raised);color:var(--ink);transition:.15s}
+input::placeholder,textarea::placeholder{color:#6f7f9c}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px var(--glow)}
+input:disabled{opacity:.5}
+input[type=checkbox]{accent-color:var(--acc);width:16px;height:16px}
 textarea{width:100%;min-height:90px}
-.btn{padding:8px 14px;border:none;border-radius:8px;background:#34b36b;color:#fff;cursor:pointer;font-size:14px;transition:.15s}
-.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}
-.btn.blue{background:var(--bl2)}.btn.red{background:#e5584f}.btn.gray{background:#7b8aa5}
-.btn.sm{padding:4px 9px;font-size:12px}
-.btn.big{width:100%;padding:12px;font-size:16px;font-weight:700;margin-top:6px}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+label{color:var(--ink)}
+.btn{padding:9px 15px;border:1px solid transparent;border-radius:9px;background:linear-gradient(180deg,#2fbf8a,#1f9e72);color:#04130d;cursor:pointer;font-size:14px;font-weight:600;font-family:inherit;transition:.15s}
+.btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn:active{transform:none}
+.btn.blue{background:linear-gradient(180deg,#7b98ff,#5b79f0);color:#071030}
+.btn.red{background:linear-gradient(180deg,#f58a8a,#e05c5c);color:#2a0606}
+.btn.gray{background:var(--raised2);color:var(--ink);border-color:var(--bd)}
+.btn.sm{padding:5px 10px;font-size:12px}
+.btn.big{width:100%;padding:13px;font-size:16px;margin-top:6px}
+:root[data-theme="light"] .btn{color:#fff}
+:root[data-theme="light"] .btn.gray{color:var(--ink)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.panel{background:var(--raised);border:1px solid var(--bd);padding:12px;border-radius:12px}
+.dropzone{border:2px dashed color-mix(in srgb,var(--acc) 55%,transparent);background:color-mix(in srgb,var(--acc) 7%,var(--surface));padding:12px;border-radius:12px}
 .hint{color:var(--muted);font-size:13px}
-.hidden{display:none!important}
+details>summary{cursor:pointer;color:var(--acc);margin-bottom:8px}
 .msg{min-height:20px;font-size:13px;margin:6px 0}
-.msg.err{color:#c0362c}.msg.ok{color:#168a4a}
-.badge{background:#dbe4ff;color:var(--bl);border-radius:10px;padding:1px 8px;font-size:11px}
+.msg.err{color:var(--bad)}.msg.ok{color:var(--ok)}
+.badge{background:color-mix(in srgb,var(--acc) 22%,transparent);color:var(--acc);border-radius:999px;padding:1px 9px;font-size:11px;font-weight:600}
 
-/* ---------- Jedwali ---------- */
-table{border-collapse:collapse;width:100%}
-th,td{border:1px solid var(--bd);padding:5px 7px;text-align:center;font-size:14px}
-th{background:#e6ebff;color:#33448f}
-tbody tr:nth-child(even) td:not([class^="g"]){background:#fafbff}
+/* ---------- Majedwali ---------- */
+table{border-collapse:separate;border-spacing:0;width:100%;border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+th,td{border-bottom:1px solid var(--bd);border-right:1px solid var(--bd);padding:7px 9px;text-align:center;font-size:14px}
+tr>*:last-child{border-right:none}
+table tr:last-child>*{border-bottom:none}
+th{background:var(--th);color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.4px;font-weight:700}
+tr:nth-child(even) td{background:color-mix(in srgb,var(--raised) 55%,transparent)}
+tr:hover td{background:color-mix(in srgb,var(--acc) 9%,transparent)}
 td.l{text-align:left}
-.tw{overflow:auto;max-height:68vh;border-radius:8px}
+.tw{overflow:auto;max-height:68vh;border-radius:10px}
+.tw table{border-radius:0}
 .tw th{position:sticky;top:0;z-index:2}
-.tw td.nm{position:sticky;left:0;background:#fff;z-index:1;text-align:left;min-width:170px}
-td input.m{width:58px;text-align:center;padding:5px}
-td input.m:focus{outline:2px solid var(--bl2)}
-
-/* Madaraja — rangi hafifu */
-.gA{background:#d9f5e3!important}.gB{background:#dbeafe!important}.gC{background:#fdf6c9!important}
-.gD{background:#ffe8d2!important}.gE{background:#fddede!important}
+.tw td.nm{position:sticky;left:0;background:var(--surface)!important;z-index:1;text-align:left;min-width:170px}
+td input.m{width:60px;text-align:center;padding:6px;background:var(--bg)}
+td input.m:focus{background:var(--raised)}
+.gA{background:var(--gA)!important}.gB{background:var(--gB)!important}.gC{background:var(--gC)!important}
+.gD{background:var(--gD)!important}.gE{background:var(--gE)!important}
 
 /* ---------- Takwimu ---------- */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
-.stat{background:var(--tint);border:1px solid var(--bd);border-radius:12px;padding:10px;text-align:center}
-.stat b{display:block;font-size:22px;color:var(--bl)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:14px 0}
+.stat{background:var(--raised);border:1px solid var(--bd);border-radius:12px;padding:14px;text-align:center;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;inset:auto 0 0 0;height:3px;background:linear-gradient(90deg,var(--acc),transparent)}
+.stat b{display:block;font-size:26px;color:var(--ink);font-weight:800}
 .stat span{font-size:12px;color:var(--muted)}
-.warn{color:#b45309;font-size:12px}
-.hbar{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:14px}
-.hbar .lb{width:190px}
-.hbar .tr{flex:1;background:#e5eaf5;border-radius:6px;height:20px;overflow:hidden}
-.hbar .tr i{display:block;height:100%;background:var(--bl2)}
+.warn{color:var(--warn);font-size:12px}
+.hbar{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:14px}
+.hbar .lb{width:190px;color:var(--muted)}
+.hbar .tr{flex:1;background:var(--raised);border-radius:8px;height:20px;overflow:hidden;border:1px solid var(--bd)}
+.hbar .tr i{display:block;height:100%;background:var(--acc);border-radius:8px}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:860px){.grid2{grid-template-columns:1fr}}
 
-/* ---------- Dirisha la mipangilio ---------- */
-dialog{border:none;border-radius:14px;padding:20px;max-width:520px;width:94%;box-shadow:0 10px 40px rgba(0,0,0,.25);background:#fbfcff}
-dialog::backdrop{background:rgba(30,41,80,.35)}
-.fg{display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;margin-bottom:8px}
+/* ---------- Dirisha ---------- */
+dialog{border:1px solid var(--bd);border-radius:16px;padding:22px;max-width:540px;width:94%;box-shadow:0 20px 60px rgba(0,0,0,.55);background:var(--surface);color:var(--ink)}
+dialog::backdrop{background:rgba(3,7,18,.65);backdrop-filter:blur(3px)}
+.fg{display:grid;grid-template-columns:140px 1fr;gap:10px;align-items:center;margin-bottom:10px}
 
 /* ---------- Skrini ya kuingia ---------- */
-.auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
-  background:radial-gradient(circle at 20% 20%,#dbe8ff,transparent 55%),radial-gradient(circle at 80% 80%,#e6f9ee,transparent 55%)}
-.auth-box{background:#fff;border:1px solid var(--bd);border-radius:18px;padding:28px;width:100%;max-width:410px;
-  box-shadow:0 12px 40px rgba(60,80,140,.15);animation:fade .4s}
-.auth-logo{font-size:46px;text-align:center}
-.auth-box h1{text-align:center;font-size:20px;color:var(--bl);margin:4px 0 14px}
-.auth-box h2{font-size:17px;text-align:center}
-.auth-box label{display:block;font-size:13px;font-weight:600;color:#475569;margin-bottom:10px}
-.auth-box label input{display:block;width:100%;margin-top:4px;padding:10px}
-.auth-box label.chk{font-weight:400;display:flex;gap:6px;align-items:center}
-.auth-box label.chk input{display:inline;width:auto;margin:0}
-.pw{display:flex;gap:4px;margin-top:4px}
+.auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.auth-box{background:var(--surface);border:1px solid var(--bd);border-radius:20px;padding:30px;width:100%;max-width:420px;box-shadow:var(--shadow);animation:fade .4s both}
+.auth-logo{width:60px;height:60px;margin:0 auto 6px;border-radius:16px;display:grid;place-items:center;font-size:30px;background:linear-gradient(135deg,var(--acc),#22d3b6);box-shadow:0 6px 22px var(--glow)}
+.auth-box h1{text-align:center;font-size:20px;margin:6px 0 16px}
+.auth-box h2{font-size:16px;text-align:center;color:var(--muted);font-weight:600}
+.auth-box label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:12px}
+.auth-box label input{display:block;width:100%;margin-top:5px;padding:11px}
+.auth-box label.chk{font-weight:400;display:flex;gap:8px;align-items:center}
+.auth-box label.chk input{display:inline;width:16px;margin:0;padding:0}
+.pw{display:flex;gap:4px;margin-top:5px}
 .pw input{margin-top:0!important}
-.pw button{border:1px solid #b6c2d9;background:#f4f7ff;border-radius:8px;cursor:pointer;padding:0 10px}
+.pw button{border:1px solid var(--bd);background:var(--raised);border-radius:9px;cursor:pointer;padding:0 12px;color:var(--ink)}
 
-/* ---------- Ripoti (zinazochapishwa) ---------- */
-.rep{background:#fff;border:2px solid var(--bl2);border-radius:6px;padding:20px 24px;margin-bottom:18px;page-break-after:always;break-inside:avoid}
-.rh{display:flex;align-items:center;gap:14px;justify-content:center;border-bottom:3px double var(--bl2);padding-bottom:8px;margin-bottom:10px;text-align:center}
-.rh img{height:64px;width:64px;object-fit:contain}
+/* ---------- Ripoti: karatasi nyeupe (hata kwenye dark mode) ---------- */
+.rep{color-scheme:light;--ink:#111827;--muted:#475569;--bd:#cbd5e1;--th:#e0e7ff;--acc:#1e3a8a;--raised:#f1f5f9;--surface:#fff;
+  --gA:#dcfce7;--gB:#dbeafe;--gC:#fef9c3;--gD:#ffedd5;--gE:#fee2e2;--ok:#15803d;--bad:#b91c1c;--warn:#b45309;
+  background:#fff;color:var(--ink);border:2px solid #1e3a8a;border-radius:6px;padding:20px 24px;margin-bottom:18px;page-break-after:always;break-inside:avoid;box-shadow:0 8px 28px rgba(0,0,0,.35)}
+.rep::before{display:none}
+.rep th{background:#e0e7ff;color:#1e3a8a}
+.rep tr:nth-child(even) td,.rep tr:hover td{background:transparent}
+.rep table{border-radius:0}
+.rep h3{color:#1e3a8a}
+.rep .stat{background:#f1f5f9}.rep .stat b{color:#1e3a8a}
+.rep .hbar .tr{background:#e2e8f0;border-color:#cbd5e1}
+.rh{display:flex;align-items:center;gap:14px;justify-content:center;border-bottom:3px double #1e3a8a;padding-bottom:8px;margin-bottom:10px;text-align:center}
+.rh img{height:64px;width:64px;object-fit:contain;background:none;padding:0}
 .rh h3{margin:0;font-size:20px;text-transform:uppercase}
 .rh div{font-size:13px}
 .rt{text-align:center;font-weight:bold;margin:6px 0 10px;font-size:15px}
 .info{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:10px;font-size:14px}
 .sum{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
-.sum div{border:1px solid var(--bl2);background:var(--tint);border-radius:8px;text-align:center;padding:6px;font-size:12px}
-.sum b{display:block;font-size:20px;color:var(--bl)}
-.bw{position:relative;height:14px;background:#e2e8f0;border-radius:3px;min-width:110px}
-.bw i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
-.bw b{position:absolute;top:-2px;bottom:-2px;width:2px;background:#111}
-.rm{border:1px solid var(--bd);border-radius:6px;padding:6px 8px;margin:6px 0;font-size:14px;min-height:34px}
-.rm:focus{outline:2px dashed var(--bl2)}
+.sum div{border:1px solid #1e3a8a;background:#f8fafc;border-radius:8px;text-align:center;padding:6px;font-size:12px}
+.sum b{display:block;font-size:20px;color:#1e3a8a}
+.rm{border:1px solid #cbd5e1;border-radius:6px;padding:6px 8px;margin:6px 0;font-size:14px;min-height:34px;background:#fff}
+.rm:focus{outline:2px dashed #1e3a8a}
 .key{font-size:11px;color:#475569;margin-top:6px}
 .sign{display:flex;justify-content:space-between;margin-top:30px;font-size:13px;gap:20px}
 .sign div{border-top:1px solid #000;padding-top:4px;flex:1;text-align:center}
 .up{color:#15803d;font-weight:bold}.dn{color:#b91c1c;font-weight:bold}
 
 /* ---------- Simu ---------- */
-@media(max-width:640px){
-  header{padding:8px 12px}nav{padding:8px 10px}nav button{padding:8px 12px;font-size:13px}
-  main{padding:10px}.fg{grid-template-columns:1fr}.sum{grid-template-columns:repeat(2,1fr)}
-  .hbar .lb{width:110px}
+@media(max-width:700px){
+  header{padding:10px 12px}nav{padding:8px 10px;overflow-x:auto;flex-wrap:nowrap}nav button{padding:8px 12px;font-size:13px;white-space:nowrap}
+  main{padding:10px}.card{padding:14px}.fg{grid-template-columns:1fr}.sum{grid-template-columns:repeat(2,1fr)}
+  .hbar .lb{width:110px}.rep{padding:14px}
+  .stats{grid-template-columns:repeat(2,1fr)}.stat{padding:10px}.stat b{font-size:21px}
+  header .hr{width:100%}
 }
 
 /* ---------- Kuchapisha ---------- */
 @media print{
-  header,nav,.noprint,dialog,#authView{display:none!important}
-  body{background:#fff!important}
+  header,nav,footer,.noprint,dialog,#authView{display:none!important}
+  body{background:#fff!important;color:#000}
   main{padding:0;max-width:none}
   .sec{display:none!important}
   #sec-ripoti{display:block!important}
-  #sec-ripoti .card.pr{box-shadow:none;padding:0;margin:0;border:none}
-  .rep{border:2px solid #000;margin:0;border-radius:0}
+  #sec-ripoti .card.pr{box-shadow:none;padding:0;margin:0;border:none;background:#fff}
+  .rep{border:2px solid #000;margin:0;border-radius:0;box-shadow:none}
   .rep:last-child{page-break-after:auto}
   .rm{border:none;padding:2px 0}
 }

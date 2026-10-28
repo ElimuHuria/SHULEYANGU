@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Mfumo wa kuandaa matokeo na ripoti za shule ya msingi (Darasa I–VII).">
-<meta name="theme-color" content="#6d83f2">
+<meta name="theme-color" content="#0b1120">
 <title>Mfumo wa Matokeo ya Shule</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%93%3C/text%3E%3C/svg%3E">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("mfumo_theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-sec="auth">
@@ -47,9 +48,10 @@
 <!-- ========== MFUMO ========== -->
 <div id="appView" class="hidden">
 <header>
- <div class="t"><img id="hLogo" class="hidden" alt="">
+ <div class="t"><span class="mark" id="hMark">🎓</span><img id="hLogo" class="hidden" alt="">
   <div><h1 id="hTitle">Mfumo wa Matokeo ya Shule</h1><small id="hSub">Usajili • Mitihani • Ripoti</small></div></div>
  <div class="hr">
+  <button class="btn gray sm" id="themeBtn" onclick="toggleTheme()" title="Badili mandhari">🌙</button>
   <span class="me">👤 <b id="meName"></b> <em id="meRole"></em></span>
   <button class="btn gray sm" onclick="changeMyPw()">🔑 Nenosiri</button>
   <button class="btn gray adminOnly" onclick="openSet()">⚙ Mipangilio ya Shule</button>
@@ -57,12 +59,30 @@
  </div>
 </header>
 <nav>
+ <button id="nb-muhtasari" onclick="go('muhtasari')">📊 MUHTASARI</button>
  <button id="nb-darasa" onclick="go('darasa')">🏫 DARASA</button>
  <button id="nb-mitihani" onclick="go('mitihani')">📝 MITIHANI</button>
  <button id="nb-ripoti" onclick="go('ripoti')">📄 RIPOTI</button>
  <button id="nb-watumiaji" class="adminOnly hidden" onclick="go('watumiaji')">👥 WATUMIAJI</button>
 </nav>
 <main>
+
+<!-- MUHTASARI -->
+<section id="sec-muhtasari" class="sec hidden">
+ <div class="card">
+  <h2>Muhtasari wa Shule</h2>
+  <div class="stats" id="ovStats"></div>
+  <div class="cta">
+   <button class="btn" onclick="go('darasa')">+ Sajili Wanafunzi</button>
+   <button class="btn blue" onclick="go('mitihani')">📝 Ingiza Alama</button>
+   <button class="btn gray" onclick="go('ripoti')">📄 Tengeneza Ripoti</button>
+  </div>
+ </div>
+ <div class="grid2">
+  <div class="card"><h2>Wanafunzi kwa Darasa</h2><div id="ovClasses"></div></div>
+  <div class="card"><h2>Mitihani ya Hivi Karibuni</h2><div id="ovExams"></div></div>
+ </div>
+</section>
 
 <!-- DARASA -->
 <section id="sec-darasa" class="sec">
@@ -80,7 +100,7 @@
    <button class="btn" onclick="addStudent()">+ Sajili Mwanafunzi</button>
   </div>
   <details class="row" style="display:block;margin-bottom:12px">
-   <summary style="cursor:pointer;color:#2563eb"><b>Sajili wanafunzi wengi kwa mara moja</b></summary>
+   <summary><b>Sajili wanafunzi wengi kwa mara moja</b></summary>
    <p class="hint">Bandika majina, jina moja kila mstari. Unaweza kuweka jinsia baada ya koma, mf. <i>Asha Juma, KE</i>. Unaweza kunakili moja kwa moja kutoka Excel.</p>
    <textarea id="bulk" placeholder="Asha Juma, KE&#10;Baraka Mushi, ME&#10;..."></textarea>
    <div class="row" style="margin-top:6px">
@@ -115,7 +135,7 @@
    <button class="btn" onclick="newExam()">+ Mtihani Mpya</button>
    <button class="btn red" onclick="delExam()">Futa</button>
   </div>
-  <div class="row" style="background:#f1f5f9;padding:10px;border-radius:8px">
+  <div class="row panel">
    <label><b>Jina la Mtihani:</b></label>
    <input id="exName" style="min-width:240px" placeholder="mf. Mtihani wa Kati ya Muhula" onchange="saveExMeta()">
    <label><b>Muhula:</b></label>
@@ -125,7 +145,7 @@
    <label><b>Tarehe:</b></label>
    <input type="date" id="exTarehe" onchange="saveExMeta()">
   </div>
-  <div class="row" style="border:2px dashed #2563eb;padding:10px;border-radius:8px;background:#f8fbff">
+  <div class="row dropzone">
    <b>📄 Template ya Alama:</b>
    <button class="btn" onclick="exportCsv(false)">⬇ Pakua Template</button>
    <label class="btn blue" style="display:inline-block;cursor:pointer">⬆ Pakia Template<input type="file" accept=".csv,.txt,.tsv" class="hidden" onchange="importMarks(event)"></label>
@@ -137,7 +157,7 @@
    <span class="hint">Tumia <b>Enter</b> au <b>↓ ↑</b> kuhama kati ya wanafunzi. Alama 0–100.</span>
   </div>
   <details style="margin-bottom:12px">
-   <summary style="cursor:pointer;color:#2563eb"><b>Bandika matokeo kutoka Excel</b></summary>
+   <summary><b>Bandika matokeo kutoka Excel</b></summary>
    <p class="hint">Nakili safu kutoka Excel zenye mpangilio: <b>Jina, Kiswahili, Hisabati, English, Sayansi, Jiografia na Mazingira, Historia ya Tanzania</b> kisha bandika hapa. Majina lazima yalingane na yaliyosajiliwa kwenye Darasa.</p>
    <textarea id="pasteMarks"></textarea>
    <button class="btn" style="margin-top:6px" onclick="importText(pasteMarks.value);pasteMarks.value=''">Pakia Matokeo</button>
@@ -185,6 +205,7 @@
  </div>
 </section>
 </main>
+<footer>Mfumo wa Matokeo ya Shule • Data huhifadhiwa kwenye kivinjari chako</footer>
 
 <dialog id="dlg">
  <h2>Mipangilio ya Shule</h2>
